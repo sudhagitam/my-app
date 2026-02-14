@@ -4,13 +4,13 @@ import { useState } from 'react'
 
 // Scientific Calculator Component
 function ScientificCalculator() {
-  const [display, setDisplay] = useState('0')
-  const [prevValue, setPrevValue] = useState(null)
-  const [operation, setOperation] = useState(null)
-  const [newNumber, setNewNumber] = useState(true)
-  const [angleMode, setAngleMode] = useState('deg') // deg or rad
+  const [display, setDisplay] = useState<string>('0')
+  const [prevValue, setPrevValue] = useState<number | null>(null)
+  const [operation, setOperation] = useState<string | null>(null)
+  const [newNumber, setNewNumber] = useState<boolean>(true)
+  const [angleMode, setAngleMode] = useState<'deg' | 'rad'>('deg')
 
-  const handleNumber = (num) => {
+  const handleNumber = (num: number) => {
     if (newNumber) {
       setDisplay(String(num))
       setNewNumber(false)
@@ -28,7 +28,7 @@ function ScientificCalculator() {
     }
   }
 
-  const handleOperation = (op) => {
+  const handleOperation = (op: string) => {
     const currentValue = parseFloat(display)
     
     if (prevValue === null) {
@@ -43,7 +43,7 @@ function ScientificCalculator() {
     setNewNumber(true)
   }
 
-  const calculate = (prev, current, op) => {
+  const calculate = (prev: number, current: number, op: string): number => {
     switch (op) {
       case '+':
         return prev + current
@@ -78,9 +78,9 @@ function ScientificCalculator() {
     setNewNumber(true)
   }
 
-  const handleScientificFunction = (func) => {
+  const handleScientificFunction = (func: string) => {
     const value = parseFloat(display)
-    let result
+    let result: number
 
     switch (func) {
       case 'sin':
@@ -124,7 +124,7 @@ function ScientificCalculator() {
     setNewNumber(true)
   }
 
-  const factorial = (n) => {
+  const factorial = (n: number): number => {
     if (n < 0 || !Number.isInteger(n)) return NaN
     if (n === 0 || n === 1) return 1
     let result = 1
@@ -138,7 +138,6 @@ function ScientificCalculator() {
     <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-slate-700/50">
       <h2 className="text-white text-2xl font-bold mb-4 text-center">Scientific Calculator</h2>
       
-      {/* Display */}
       <div className="bg-slate-900/80 rounded-2xl p-6 mb-4 border border-slate-700/30">
         <div className="text-right">
           <div className="text-slate-500 text-sm mb-1 h-6 flex justify-between">
@@ -151,50 +150,42 @@ function ScientificCalculator() {
         </div>
       </div>
 
-      {/* Buttons Grid */}
       <div className="grid grid-cols-5 gap-2">
-        {/* Row 1 - Scientific Functions */}
         <button onClick={() => handleScientificFunction('sin')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">sin</button>
         <button onClick={() => handleScientificFunction('cos')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">cos</button>
         <button onClick={() => handleScientificFunction('tan')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">tan</button>
         <button onClick={() => setAngleMode(angleMode === 'deg' ? 'rad' : 'deg')} className="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">{angleMode}</button>
         <button onClick={handleClear} className="bg-red-600 hover:bg-red-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">AC</button>
 
-        {/* Row 2 */}
         <button onClick={() => handleScientificFunction('ln')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">ln</button>
         <button onClick={() => handleScientificFunction('log')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">log</button>
         <button onClick={() => handleScientificFunction('sqrt')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">√</button>
         <button onClick={() => handleOperation('^')} className="bg-purple-600 hover:bg-purple-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">x^y</button>
         <button onClick={() => handleOperation('÷')} className={`${operation === '÷' ? 'bg-purple-500' : 'bg-purple-600 hover:bg-purple-500'} text-white rounded-xl p-3 text-lg font-medium transition-all active:scale-95`}>÷</button>
 
-        {/* Row 3 */}
         <button onClick={() => handleScientificFunction('x²')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">x²</button>
         <button onClick={() => handleScientificFunction('1/x')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">1/x</button>
         <button onClick={() => handleScientificFunction('!')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">x!</button>
         <button onClick={() => handleNumber(7)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">7</button>
         <button onClick={() => handleNumber(8)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">8</button>
 
-        {/* Row 4 */}
         <button onClick={() => handleScientificFunction('π')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">π</button>
         <button onClick={() => handleScientificFunction('e')} className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-3 text-sm font-medium transition-all active:scale-95">e</button>
         <button onClick={() => handleOperation('×')} className={`${operation === '×' ? 'bg-purple-500' : 'bg-purple-600 hover:bg-purple-500'} text-white rounded-xl p-3 text-lg font-medium transition-all active:scale-95`}>×</button>
         <button onClick={() => handleNumber(4)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">4</button>
         <button onClick={() => handleNumber(5)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">5</button>
 
-        {/* Row 5 */}
         <button onClick={() => handleNumber(9)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">9</button>
         <button onClick={() => handleOperation('-')} className={`${operation === '-' ? 'bg-purple-500' : 'bg-purple-600 hover:bg-purple-500'} text-white rounded-xl p-3 text-lg font-medium transition-all active:scale-95`}>−</button>
         <button onClick={() => handleNumber(6)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">6</button>
         <button onClick={() => handleNumber(1)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">1</button>
         <button onClick={() => handleNumber(2)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">2</button>
 
-        {/* Row 6 */}
         <button onClick={() => handleOperation('+')} className={`${operation === '+' ? 'bg-purple-500' : 'bg-purple-600 hover:bg-purple-500'} text-white rounded-xl p-3 text-lg font-medium transition-all active:scale-95`}>+</button>
         <button onClick={() => handleNumber(3)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">3</button>
         <button onClick={() => handleNumber(0)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95 col-span-2">0</button>
         <button onClick={handleDecimal} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-light transition-all active:scale-95">.</button>
 
-        {/* Row 7 */}
         <button onClick={handleEquals} className="bg-purple-600 hover:bg-purple-500 text-white rounded-xl p-3 text-lg font-medium transition-all active:scale-95 col-span-5">=</button>
       </div>
     </div>
@@ -203,12 +194,12 @@ function ScientificCalculator() {
 
 // Mortgage Calculator Component
 function MortgageCalculator() {
-  const [loanAmount, setLoanAmount] = useState('')
-  const [interestRate, setInterestRate] = useState('')
-  const [loanTerm, setLoanTerm] = useState('')
-  const [monthlyPayment, setMonthlyPayment] = useState(null)
-  const [totalPayment, setTotalPayment] = useState(null)
-  const [totalInterest, setTotalInterest] = useState(null)
+  const [loanAmount, setLoanAmount] = useState<string>('')
+  const [interestRate, setInterestRate] = useState<string>('')
+  const [loanTerm, setLoanTerm] = useState<string>('')
+  const [monthlyPayment, setMonthlyPayment] = useState<string | null>(null)
+  const [totalPayment, setTotalPayment] = useState<string | null>(null)
+  const [totalInterest, setTotalInterest] = useState<string | null>(null)
 
   const calculateMortgage = () => {
     const principal = parseFloat(loanAmount)
@@ -217,7 +208,6 @@ function MortgageCalculator() {
     const numberOfPayments = parseFloat(loanTerm) * 12
 
     if (principal && annualRate && numberOfPayments) {
-      // Monthly payment formula: M = P[r(1+r)^n]/[(1+r)^n-1]
       const monthly = 
         (principal * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
         (Math.pow(1 + monthlyRate, numberOfPayments) - 1)
@@ -244,7 +234,6 @@ function MortgageCalculator() {
     <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-slate-700/50">
       <h2 className="text-white text-2xl font-bold mb-4 text-center">Mortgage Calculator</h2>
       
-      {/* Input Fields */}
       <div className="space-y-4 mb-6">
         <div>
           <label className="text-slate-300 text-sm font-medium mb-2 block">Loan Amount ($)</label>
@@ -281,7 +270,6 @@ function MortgageCalculator() {
         </div>
       </div>
 
-      {/* Action Buttons */}
       <div className="grid grid-cols-2 gap-3 mb-6">
         <button
           onClick={calculateMortgage}
@@ -297,7 +285,6 @@ function MortgageCalculator() {
         </button>
       </div>
 
-      {/* Results */}
       {monthlyPayment && (
         <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-700/30 space-y-3">
           <div className="flex justify-between items-center">
@@ -307,11 +294,11 @@ function MortgageCalculator() {
           <div className="border-t border-slate-700/50 pt-3">
             <div className="flex justify-between items-center mb-2">
               <span className="text-slate-400 text-sm">Total Payment</span>
-              <span className="text-emerald-400 text-lg font-semibold">${parseFloat(totalPayment).toLocaleString()}</span>
+              <span className="text-emerald-400 text-lg font-semibold">${parseFloat(totalPayment!).toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-slate-400 text-sm">Total Interest</span>
-              <span className="text-orange-400 text-lg font-semibold">${parseFloat(totalInterest).toLocaleString()}</span>
+              <span className="text-orange-400 text-lg font-semibold">${parseFloat(totalInterest!).toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -328,9 +315,18 @@ function MortgageCalculator() {
 
 // Age Calculator Component
 function AgeCalculator() {
-  const [birthDate, setBirthDate] = useState('')
-  const [targetDate, setTargetDate] = useState('')
-  const [ageResult, setAgeResult] = useState(null)
+  const [birthDate, setBirthDate] = useState<string>('')
+  const [targetDate, setTargetDate] = useState<string>('')
+  const [ageResult, setAgeResult] = useState<{
+    years: number
+    months: number
+    days: number
+    totalDays: number
+    totalWeeks: number
+    totalMonths: number
+    daysToNextBirthday: number
+    nextBirthdayYear: number
+  } | null>(null)
 
   const calculateAge = () => {
     if (!birthDate) return
@@ -342,30 +338,26 @@ function AgeCalculator() {
     let months = target.getMonth() - birth.getMonth()
     let days = target.getDate() - birth.getDate()
 
-    // Adjust for negative days
     if (days < 0) {
       months--
       const prevMonth = new Date(target.getFullYear(), target.getMonth(), 0)
       days += prevMonth.getDate()
     }
 
-    // Adjust for negative months
     if (months < 0) {
       years--
       months += 12
     }
 
-    // Calculate total days
-    const totalDays = Math.floor((target - birth) / (1000 * 60 * 60 * 24))
+    const totalDays = Math.floor((target.getTime() - birth.getTime()) / (1000 * 60 * 60 * 24))
     const totalWeeks = Math.floor(totalDays / 7)
     const totalMonths = years * 12 + months
 
-    // Calculate next birthday
     let nextBirthday = new Date(target.getFullYear(), birth.getMonth(), birth.getDate())
     if (nextBirthday < target) {
       nextBirthday.setFullYear(target.getFullYear() + 1)
     }
-    const daysToNextBirthday = Math.floor((nextBirthday - target) / (1000 * 60 * 60 * 24))
+    const daysToNextBirthday = Math.floor((nextBirthday.getTime() - target.getTime()) / (1000 * 60 * 60 * 24))
 
     setAgeResult({
       years,
@@ -389,7 +381,6 @@ function AgeCalculator() {
     <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-slate-700/50">
       <h2 className="text-white text-2xl font-bold mb-4 text-center">Age Calculator</h2>
       
-      {/* Input Fields */}
       <div className="space-y-4 mb-6">
         <div>
           <label className="text-slate-300 text-sm font-medium mb-2 block">Date of Birth</label>
@@ -407,14 +398,12 @@ function AgeCalculator() {
             type="date"
             value={targetDate}
             onChange={(e) => setTargetDate(e.target.value)}
-            placeholder="Leave empty for today"
             className="w-full bg-slate-900/80 border border-slate-700/30 rounded-xl p-4 text-white text-lg focus:outline-none focus:border-purple-500 transition-colors"
           />
           <p className="text-slate-500 text-xs mt-1">Leave empty to calculate age as of today</p>
         </div>
       </div>
 
-      {/* Action Buttons */}
       <div className="grid grid-cols-2 gap-3 mb-6">
         <button
           onClick={calculateAge}
@@ -430,10 +419,8 @@ function AgeCalculator() {
         </button>
       </div>
 
-      {/* Results */}
       {ageResult && (
         <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-700/30 space-y-4">
-          {/* Main Age Display */}
           <div className="text-center pb-4 border-b border-slate-700/50">
             <div className="text-white text-4xl font-bold mb-2">
               {ageResult.years} <span className="text-2xl font-normal text-slate-400">years</span>
@@ -443,7 +430,6 @@ function AgeCalculator() {
             </div>
           </div>
 
-          {/* Detailed Breakdown */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-slate-400 text-sm">Total Months</span>
@@ -459,7 +445,6 @@ function AgeCalculator() {
             </div>
           </div>
 
-          {/* Next Birthday */}
           <div className="pt-4 border-t border-slate-700/50 text-center">
             <p className="text-slate-400 text-sm mb-1">Next Birthday</p>
             <p className="text-orange-400 font-semibold text-lg">
@@ -480,11 +465,11 @@ function AgeCalculator() {
 
 // Temperature Converter Component
 function TemperatureConverter() {
-  const [celsius, setCelsius] = useState('')
-  const [fahrenheit, setFahrenheit] = useState('')
-  const [kelvin, setKelvin] = useState('')
+  const [celsius, setCelsius] = useState<string>('')
+  const [fahrenheit, setFahrenheit] = useState<string>('')
+  const [kelvin, setKelvin] = useState<string>('')
 
-  const handleCelsiusChange = (value) => {
+  const handleCelsiusChange = (value: string) => {
     setCelsius(value)
     if (value === '') {
       setFahrenheit('')
@@ -498,7 +483,7 @@ function TemperatureConverter() {
     }
   }
 
-  const handleFahrenheitChange = (value) => {
+  const handleFahrenheitChange = (value: string) => {
     setFahrenheit(value)
     if (value === '') {
       setCelsius('')
@@ -513,7 +498,7 @@ function TemperatureConverter() {
     }
   }
 
-  const handleKelvinChange = (value) => {
+  const handleKelvinChange = (value: string) => {
     setKelvin(value)
     if (value === '') {
       setCelsius('')
@@ -541,7 +526,7 @@ function TemperatureConverter() {
     { label: 'Boiling Point', c: 100, f: 212, k: 373.15 }
   ]
 
-  const setQuickTemp = (temp) => {
+  const setQuickTemp = (temp: { c: number; f: number; k: number }) => {
     setCelsius(temp.c.toString())
     setFahrenheit(temp.f.toString())
     setKelvin(temp.k.toString())
@@ -551,7 +536,6 @@ function TemperatureConverter() {
     <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-slate-700/50">
       <h2 className="text-white text-2xl font-bold mb-4 text-center">Temperature Converter</h2>
       
-      {/* Input Fields */}
       <div className="space-y-4 mb-6">
         <div>
           <label className="text-slate-300 text-sm font-medium mb-2 block">Celsius (°C)</label>
@@ -590,7 +574,6 @@ function TemperatureConverter() {
         </div>
       </div>
 
-      {/* Clear Button */}
       <button
         onClick={handleClear}
         className="w-full bg-slate-600 hover:bg-slate-500 text-white rounded-xl p-4 text-lg font-medium transition-all active:scale-95 shadow-lg mb-6"
@@ -598,7 +581,6 @@ function TemperatureConverter() {
         Clear All
       </button>
 
-      {/* Quick Conversions */}
       <div className="bg-slate-900/80 rounded-2xl p-4 border border-slate-700/30">
         <p className="text-slate-400 text-sm mb-3 font-medium">Quick Conversions</p>
         <div className="grid grid-cols-2 gap-2">
@@ -615,7 +597,6 @@ function TemperatureConverter() {
         </div>
       </div>
 
-      {/* Temperature Info */}
       {(celsius || fahrenheit || kelvin) && (
         <div className="mt-4 bg-slate-900/80 rounded-2xl p-4 border border-slate-700/30">
           <p className="text-slate-400 text-xs text-center">
@@ -629,14 +610,13 @@ function TemperatureConverter() {
 
 // Currency Converter Component
 function CurrencyConverter() {
-  const [amount, setAmount] = useState('')
-  const [fromCurrency, setFromCurrency] = useState('USD')
-  const [toCurrency, setToCurrency] = useState('EUR')
-  const [result, setResult] = useState(null)
-  const [rate, setRate] = useState(null)
+  const [amount, setAmount] = useState<string>('')
+  const [fromCurrency, setFromCurrency] = useState<string>('USD')
+  const [toCurrency, setToCurrency] = useState<string>('EUR')
+  const [result, setResult] = useState<string | null>(null)
+  const [rate, setRate] = useState<string | null>(null)
 
-  // Common exchange rates (base: USD) - these are approximate
-  const exchangeRates = {
+  const exchangeRates: Record<string, number> = {
     USD: 1,
     EUR: 0.92,
     GBP: 0.79,
@@ -660,26 +640,26 @@ function CurrencyConverter() {
   }
 
   const currencies = [
-    { code: 'USD', name: 'US Dollar', symbol: '$' },
-    { code: 'EUR', name: 'Euro', symbol: '€' },
-    { code: 'GBP', name: 'British Pound', symbol: '£' },
-    { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
-    { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$' },
-    { code: 'AUD', name: 'Australian Dollar', symbol: 'A$' },
-    { code: 'CHF', name: 'Swiss Franc', symbol: 'Fr' },
-    { code: 'CNY', name: 'Chinese Yuan', symbol: '¥' },
-    { code: 'INR', name: 'Indian Rupee', symbol: '₹' },
-    { code: 'MXN', name: 'Mexican Peso', symbol: '$' },
-    { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' },
-    { code: 'ZAR', name: 'South African Rand', symbol: 'R' },
-    { code: 'KRW', name: 'South Korean Won', symbol: '₩' },
-    { code: 'SGD', name: 'Singapore Dollar', symbol: 'S$' },
-    { code: 'NZD', name: 'New Zealand Dollar', symbol: 'NZ$' },
-    { code: 'HKD', name: 'Hong Kong Dollar', symbol: 'HK$' },
-    { code: 'SEK', name: 'Swedish Krona', symbol: 'kr' },
-    { code: 'NOK', name: 'Norwegian Krone', symbol: 'kr' },
-    { code: 'DKK', name: 'Danish Krone', symbol: 'kr' },
-    { code: 'RUB', name: 'Russian Ruble', symbol: '₽' }
+    { code: 'USD', name: 'US Dollar' },
+    { code: 'EUR', name: 'Euro' },
+    { code: 'GBP', name: 'British Pound' },
+    { code: 'JPY', name: 'Japanese Yen' },
+    { code: 'CAD', name: 'Canadian Dollar' },
+    { code: 'AUD', name: 'Australian Dollar' },
+    { code: 'CHF', name: 'Swiss Franc' },
+    { code: 'CNY', name: 'Chinese Yuan' },
+    { code: 'INR', name: 'Indian Rupee' },
+    { code: 'MXN', name: 'Mexican Peso' },
+    { code: 'BRL', name: 'Brazilian Real' },
+    { code: 'ZAR', name: 'South African Rand' },
+    { code: 'KRW', name: 'South Korean Won' },
+    { code: 'SGD', name: 'Singapore Dollar' },
+    { code: 'NZD', name: 'New Zealand Dollar' },
+    { code: 'HKD', name: 'Hong Kong Dollar' },
+    { code: 'SEK', name: 'Swedish Krona' },
+    { code: 'NOK', name: 'Norwegian Krone' },
+    { code: 'DKK', name: 'Danish Krone' },
+    { code: 'RUB', name: 'Russian Ruble' }
   ]
 
   const convertCurrency = () => {
@@ -692,7 +672,6 @@ function CurrencyConverter() {
     const amountNum = parseFloat(amount)
     if (isNaN(amountNum)) return
 
-    // Convert to USD first, then to target currency
     const amountInUSD = amountNum / exchangeRates[fromCurrency]
     const convertedAmount = amountInUSD * exchangeRates[toCurrency]
     const exchangeRate = exchangeRates[toCurrency] / exchangeRates[fromCurrency]
@@ -720,7 +699,6 @@ function CurrencyConverter() {
     <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-slate-700/50">
       <h2 className="text-white text-2xl font-bold mb-4 text-center">Currency Converter</h2>
       
-      {/* Amount Input */}
       <div className="mb-4">
         <label className="text-slate-300 text-sm font-medium mb-2 block">Amount</label>
         <input
@@ -733,7 +711,6 @@ function CurrencyConverter() {
         />
       </div>
 
-      {/* Quick Amount Buttons */}
       <div className="grid grid-cols-4 gap-2 mb-4">
         {quickAmounts.map((amt) => (
           <button
@@ -746,7 +723,6 @@ function CurrencyConverter() {
         ))}
       </div>
 
-      {/* From Currency */}
       <div className="mb-4">
         <label className="text-slate-300 text-sm font-medium mb-2 block">From</label>
         <select
@@ -762,7 +738,6 @@ function CurrencyConverter() {
         </select>
       </div>
 
-      {/* Swap Button */}
       <div className="flex justify-center mb-4">
         <button
           onClick={handleSwapCurrencies}
@@ -775,7 +750,6 @@ function CurrencyConverter() {
         </button>
       </div>
 
-      {/* To Currency */}
       <div className="mb-6">
         <label className="text-slate-300 text-sm font-medium mb-2 block">To</label>
         <select
@@ -791,7 +765,6 @@ function CurrencyConverter() {
         </select>
       </div>
 
-      {/* Action Buttons */}
       <div className="grid grid-cols-2 gap-3 mb-6">
         <button
           onClick={convertCurrency}
@@ -807,7 +780,6 @@ function CurrencyConverter() {
         </button>
       </div>
 
-      {/* Result Display */}
       {result && (
         <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-700/30 space-y-3">
           <div className="text-center">
@@ -838,15 +810,26 @@ function CurrencyConverter() {
   )
 }
 
-// Unit Converter Component
+// Unit Converter Component  
 function UnitConverter() {
-  const [amount, setAmount] = useState('')
-  const [category, setCategory] = useState('length')
-  const [fromUnit, setFromUnit] = useState('meter')
-  const [toUnit, setToUnit] = useState('feet')
-  const [result, setResult] = useState(null)
+  const [amount, setAmount] = useState<string>('')
+  const [category, setCategory] = useState<string>('length')
+  const [fromUnit, setFromUnit] = useState<string>('meter')
+  const [toUnit, setToUnit] = useState<string>('feet')
+  const [result, setResult] = useState<string | null>(null)
 
-  const unitCategories = {
+  type UnitData = {
+    name: string
+    symbol: string
+    toBase: number
+  }
+
+  type CategoryData = {
+    name: string
+    units: Record<string, UnitData>
+  }
+
+  const unitCategories: Record<string, CategoryData> = {
     length: {
       name: 'Length',
       units: {
@@ -932,14 +915,13 @@ function UnitConverter() {
     const fromUnitData = currentCategory.units[fromUnit]
     const toUnitData = currentCategory.units[toUnit]
 
-    // Convert to base unit first, then to target unit
     const baseValue = amountNum * fromUnitData.toBase
     const convertedValue = baseValue / toUnitData.toBase
 
     setResult(convertedValue.toFixed(6))
   }
 
-  const handleCategoryChange = (newCategory) => {
+  const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory)
     const firstUnit = Object.keys(unitCategories[newCategory].units)[0]
     const secondUnit = Object.keys(unitCategories[newCategory].units)[1]
@@ -963,7 +945,6 @@ function UnitConverter() {
     <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-slate-700/50">
       <h2 className="text-white text-2xl font-bold mb-4 text-center">Unit Converter</h2>
       
-      {/* Category Selector */}
       <div className="mb-4">
         <label className="text-slate-300 text-sm font-medium mb-2 block">Category</label>
         <select
@@ -979,7 +960,6 @@ function UnitConverter() {
         </select>
       </div>
 
-      {/* Amount Input */}
       <div className="mb-4">
         <label className="text-slate-300 text-sm font-medium mb-2 block">Amount</label>
         <input
@@ -992,7 +972,6 @@ function UnitConverter() {
         />
       </div>
 
-      {/* From Unit */}
       <div className="mb-4">
         <label className="text-slate-300 text-sm font-medium mb-2 block">From</label>
         <select
@@ -1008,7 +987,6 @@ function UnitConverter() {
         </select>
       </div>
 
-      {/* Swap Button */}
       <div className="flex justify-center mb-4">
         <button
           onClick={handleSwapUnits}
@@ -1021,7 +999,6 @@ function UnitConverter() {
         </button>
       </div>
 
-      {/* To Unit */}
       <div className="mb-6">
         <label className="text-slate-300 text-sm font-medium mb-2 block">To</label>
         <select
@@ -1037,7 +1014,6 @@ function UnitConverter() {
         </select>
       </div>
 
-      {/* Action Buttons */}
       <div className="grid grid-cols-2 gap-3 mb-6">
         <button
           onClick={convertUnits}
@@ -1053,7 +1029,6 @@ function UnitConverter() {
         </button>
       </div>
 
-      {/* Result Display */}
       {result && (
         <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-700/30 space-y-3">
           <div className="text-center">
@@ -1077,11 +1052,16 @@ function UnitConverter() {
   )
 }
 
-// Main Component with Single Calculator Selection
-export default function DualCalculator() {
-  const [selectedCalculator, setSelectedCalculator] = useState('scientific')
+// Main Component
+export default function CalculatorSuite() {
+  const [selectedCalculator, setSelectedCalculator] = useState<string>('scientific')
 
-  const calculatorTypes = {
+  type CalculatorType = {
+    name: string
+    component: () => JSX.Element
+  }
+
+  const calculatorTypes: Record<string, CalculatorType> = {
     scientific: { name: 'Scientific Calculator', component: ScientificCalculator },
     mortgage: { name: 'Mortgage Calculator', component: MortgageCalculator },
     age: { name: 'Age Calculator', component: AgeCalculator },
@@ -1098,7 +1078,6 @@ export default function DualCalculator() {
       <div className="w-full max-w-2xl">
         <h1 className="text-white text-4xl font-bold mb-8 text-center">Calculator Suite</h1>
         
-        {/* Calculator Selector Dropdown */}
         <div className="mb-6">
           <select
             value={selectedCalculator}
@@ -1113,16 +1092,14 @@ export default function DualCalculator() {
           </select>
         </div>
 
-        {/* Calculator Display */}
         <div className="flex justify-center">
           <div className="w-full max-w-md">
             <CalculatorComponent />
           </div>
         </div>
 
-        {/* Quick Navigation Dots */}
         <div className="flex justify-center gap-2 mt-6">
-          {calculatorKeys.map((key, index) => (
+          {calculatorKeys.map((key) => (
             <button
               key={key}
               onClick={() => setSelectedCalculator(key)}
@@ -1136,7 +1113,6 @@ export default function DualCalculator() {
           ))}
         </div>
 
-        {/* Info Text */}
         <div className="mt-6 text-center">
           <p className="text-slate-400 text-sm">
             Select a calculator from the dropdown or click the dots below
@@ -1146,4 +1122,3 @@ export default function DualCalculator() {
     </div>
   )
 }
-
