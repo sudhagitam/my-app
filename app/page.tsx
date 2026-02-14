@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { FC } from 'react'
 
 // Scientific Calculator Component
@@ -616,8 +616,10 @@ function CurrencyConverter() {
   const [toCurrency, setToCurrency] = useState<string>('EUR')
   const [result, setResult] = useState<string | null>(null)
   const [rate, setRate] = useState<string | null>(null)
-
-  const exchangeRates: Record<string, number> = {
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null)
+  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({
     USD: 1,
     EUR: 0.92,
     GBP: 0.79,
@@ -638,7 +640,7 @@ function CurrencyConverter() {
     NOK: 10.68,
     DKK: 6.87,
     RUB: 92.50
-  }
+  })
 
   const currencies = [
     { code: 'USD', name: 'US Dollar' },
@@ -662,6 +664,44 @@ function CurrencyConverter() {
     { code: 'DKK', name: 'Danish Krone' },
     { code: 'RUB', name: 'Russian Ruble' }
   ]
+
+  // Fetch live exchange rates
+  const fetchLiveRates = async () => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      // Using exchangerate-api.com (free tier: 1500 requests/month)
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD')
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch exchange rates')
+      }
+      
+      const data = await response.json()
+      
+      if (data.rates) {
+        setExchangeRates(data.rates)
+        const now = new Date()
+        setLastUpdated(now.toLocaleTimeString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: true 
+        }))
+        setError(null)
+      }
+    } catch (err) {
+      setError('Failed to fetch live rates. Using cached rates.')
+      console.error('Error fetching exchange rates:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Fetch rates on component mount
+  useEffect(() => {
+    fetchLiveRates()
+  }, [])
 
   const convertCurrency = () => {
     if (!amount || amount === '') {
@@ -698,7 +738,45 @@ function CurrencyConverter() {
 
   return (
     <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-slate-700/50">
-      <h2 className="text-white text-2xl font-bold mb-4 text-center">Currency Converter</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-white text-2xl font-bold">Currency Converter</h2>
+        <button
+          onClick={fetchLiveRates}
+          disabled={loading}
+          className={`${
+            loading ? 'bg-slate-600' : 'bg-emerald-600 hover:bg-emerald-500'
+          } text-white rounded-lg px-3 py-1 text-xs font-medium transition-all active:scale-95 flex items-center gap-1`}
+          title="Refresh rates"
+        >
+          <svg 
+            className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          {loading ? 'Updating...' : 'Refresh'}
+        </button>
+      </div>
+
+      {/* Live Rate Status */}
+      {lastUpdated && (
+        <div className="mb-4 bg-emerald-900/30 border border-emerald-700/50 rounded-lg p-2 text-center">
+          <p className="text-emerald-400 text-xs flex items-center justify-center gap-1">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            Live rates • Updated at {lastUpdated}
+          </p>
+        </div>
+      )}
+
+      {error && (
+        <div className="mb-4 bg-orange-900/30 border border-orange-700/50 rounded-lg p-2 text-center">
+          <p className="text-orange-400 text-xs">{error}</p>
+        </div>
+      )}
       
       <div className="mb-4">
         <label className="text-slate-300 text-sm font-medium mb-2 block">Amount</label>
@@ -804,7 +882,7 @@ function CurrencyConverter() {
       {!result && (
         <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-700/30 text-center">
           <p className="text-slate-500 text-sm">Enter amount and click Convert</p>
-          <p className="text-slate-600 text-xs mt-2">Rates are approximate</p>
+          <p className="text-slate-600 text-xs mt-2">Using live exchange rates</p>
         </div>
       )}
     </div>
