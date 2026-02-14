@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import type { FC } from 'react'
 
 // Scientific Calculator Component
 function ScientificCalculator() {
@@ -1058,7 +1059,7 @@ export default function CalculatorSuite() {
 
   type CalculatorType = {
     name: string
-    component: () => JSX.Element
+    component: FC
   }
 
   const calculatorTypes: Record<string, CalculatorType> = {
