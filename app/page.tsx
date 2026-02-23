@@ -1146,7 +1146,7 @@ export default function CalculatorSuite() {
     age: { name: 'Age Calculator', component: AgeCalculator },
     temperature: { name: 'Temperature Converter', component: TemperatureConverter },
     currency: { name: 'Currency Converter', component: CurrencyConverter },
-    unit: { name: 'Unit Converter', component: UnitConverter }
+    unit: { name: 'Units Converter', component: UnitConverter }
   }
 
   const calculatorKeys = Object.keys(calculatorTypes)
