@@ -249,7 +249,7 @@ function CurrencyConverter() {
   const rates: Record<string, number> = { USD: 1, EUR: 0.92, GBP: 0.79, JPY: 149.5, CAD: 1.36, AUD: 1.53, INR: 83.1, CNY: 7.24 };
   const [amount, setAmount] = useState("");
   const [from, setFrom] = useState("USD");
-  const [to, setTo] = useState("EUR");
+  const [to, setTo] = useState("INR");
   const converted = amount ? ((parseFloat(amount) / rates[from]) * rates[to]).toFixed(2) : "";
 
   const sel = (label: string, value: string, onChange: (v: string) => void) => (
